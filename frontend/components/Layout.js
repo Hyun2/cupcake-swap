@@ -1,53 +1,39 @@
 import { useState } from "react";
-import { AppShell, Burger, Header, MediaQuery, Navbar, Text, useMantineTheme } from "@mantine/core";
+import { AppShell, Burger, Header, MediaQuery, Navbar, Text } from "@mantine/core";
+import HeaderContents from "./HeaderContents";
+import Menu from "./Menu";
+// import Header from "./Header";
 
-function Demo() {
+const Layout = ({ children }) => {
   const [opened, setOpened] = useState(false);
-  const theme = useMantineTheme();
+  // const theme = useMantineTheme();
 
   return (
     <AppShell
-      // navbarOffsetBreakpoint controls when navbar should no longer be offset with padding-left
       navbarOffsetBreakpoint="9999"
-      // fixed prop on AppShell will be automatically added to Header and Navbar
       fixed
       navbar={
-        <Navbar
-          p="md"
-          // Breakpoint at which navbar will be hidden if hidden prop is true
-          hiddenBreakpoint="9999"
-          // Hides navbar when viewport size is less than value specified in hiddenBreakpoint
-          hidden={!opened}
-          // when viewport size is less than theme.breakpoints.sm navbar width is 100%
-          // viewport size > theme.breakpoints.sm – width is 300px
-          // viewport size > theme.breakpoints.lg – width is 400px
-          width={{ sm: 300, lg: 400 }}
-        >
+        <Navbar p="md" hiddenBreakpoint="9999" hidden={!opened} width={{ sm: 300, lg: 400 }}>
           <Text>Application navbar</Text>
         </Navbar>
       }
       header={
         <Header height={70} p="md">
           {/* Handle other responsive styles with MediaQuery component or createStyles function */}
-          <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+          <div style={{ display: "flex", alignItems: "center", height: "100%", justifyContent: "space-between" }}>
             <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-              <Burger
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
-                size="sm"
-                color={theme.colors.gray[6]}
-                mr="xl"
-              />
+              <Burger opened={opened} onClick={() => setOpened((o) => !o)} size="sm" mr="xl" />
             </MediaQuery>
-
-            <Text>Application header</Text>
+            <h1>Cupcake Swap</h1>
+            <HeaderContents />
           </div>
         </Header>
       }
     >
-      <Text>Resize app to see responsive navbar in action</Text>
+      <Menu />
+      <Text>{children}</Text>
     </AppShell>
   );
-}
+};
 
-export default Demo;
+export default Layout;
