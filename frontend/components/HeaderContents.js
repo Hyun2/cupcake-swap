@@ -1,7 +1,9 @@
-import { ActionIcon, Menu } from "@mantine/core";
+import { ActionIcon, Menu, Text } from "@mantine/core";
 import Image from "next/image";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import styled from "@emotion/styled";
+import { connectMetamask } from "../utils";
+import { useStore } from "../utils/store";
 
 const Container = styled.div`
   display: flex !important;
@@ -10,8 +12,11 @@ const Container = styled.div`
 `;
 
 const HeaderContents = () => {
+  const [walletAddress, setWalletAddress] = useStore((state) => [state.walletAddress, state.setWalletAddress]);
+
   return (
     <Container>
+      {walletAddress && <Text>{walletAddress}</Text>}
       <Menu
         controlRefProp="ref"
         control={
@@ -23,7 +28,12 @@ const HeaderContents = () => {
         delay={200}
       >
         <Menu.Item>
-          <div style={{ display: "flex", alignItems: "center" }} onClick={() => {}}>
+          <div
+            style={{ display: "flex", alignItems: "center" }}
+            onClick={() => {
+              connectMetamask({ setWalletAddress });
+            }}
+          >
             <Image width={24} height={24} src="https://docs.metamask.io/metamask-fox.svg" alt="" />
             <span style={{ marginLeft: "10px", fontSize: "16px" }}>Metamask</span>
           </div>
