@@ -5,10 +5,6 @@ const Container = styled.div`
   margin: 10px 0;
   background-color: #f9f7f1;
   padding: 10px;
-
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-gap: 40px;
 `;
 
 const Pannel = ({ children }) => {
