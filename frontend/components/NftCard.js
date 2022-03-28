@@ -2,8 +2,15 @@ import styled from "@emotion/styled";
 // import Image from "next/image";
 
 const Container = styled.div`
-  width: 218px;
+  width: 238px;
   height: 338px;
+  background-color: white;
+  border-radius: 0.5rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 `;
 
 const CImage = styled.img`

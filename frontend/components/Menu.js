@@ -36,9 +36,7 @@ const Menu = () => {
 
       <div>
         <Button variant="default">
-          <Link href="/create-swap" passHref>
-            <Text>Create Swap</Text>
-          </Link>
+          <Text>Start Swap</Text>
         </Button>
       </div>
     </Container>
