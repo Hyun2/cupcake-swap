@@ -4,7 +4,7 @@ import ThumbnailCard from "./ThumbnailCard";
 const Container = styled.div`
   background-color: #f0eee8;
   border-radius: 0.25rem;
-  margin: 15px 0px;
+  margin-bottom: 20px;
   padding: 10px;
 `;
 
