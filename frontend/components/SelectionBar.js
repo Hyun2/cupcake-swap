@@ -11,7 +11,7 @@ const Container = styled.div`
 const SelectionBar = () => {
   return (
     <Container>
-      <div>SelectionBar</div>
+      <div style={{ marginBottom: "15px" }}>Selected: 0</div>
       <ThumbnailCard />
     </Container>
   );
