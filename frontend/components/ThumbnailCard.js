@@ -4,7 +4,7 @@ import Image from "next/image";
 const ThumbnailContainer = styled.div`
   width: 144px;
   height: 128px;
-  background-color: #f0eee8;
+  background-color: white;
   border-radius: 1rem;
 
   display: flex;
