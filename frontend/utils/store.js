@@ -6,4 +6,7 @@ export const useStore = create((set) => ({
 
   walletAddress: null,
   setWalletAddress: (walletAddress) => set({ walletAddress }),
+
+  startSwapStatus: false,
+  setStartSwapStatus: (status) => set({ status }),
 }));
