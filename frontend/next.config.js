@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["docs.metamask.io", "aws1.discourse-cdn.com"],
+    domains: ["docs.metamask.io", "aws1.discourse-cdn.com", "openseauserdata.com"],
   },
 };
 
