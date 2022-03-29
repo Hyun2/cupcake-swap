@@ -1,36 +1,32 @@
 const express = require('express');
 const app = express();
-const cors = require("cors");
+const cors = require('cors');
 const { sequelize } = require('./database/models');
 const fs = require('fs');
 //router import
-const accountRouter = require('./routes/AccountRouter')
-const swapRouter = require('./routes/swapRouter')
+const accountRouter = require('./routes/AccountRouter');
+const swapRouter = require('./routes/swapRouter');
 const { token } = require('./config.json');
-
-
 
 // '/'로 들어오는 요청은 기본적으로 indexRouter로 이동해서 된다.
 
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
-app.use('/account', accountRouter)
+app.use('/account', accountRouter);
 app.use('/swap', swapRouter);
 
-sequelize.sync({ force: false })
-    .then(() => {
-        console.log('데이터베이스 연결 성공');
-    })
-    .catch((err) => {
-        console.error(err);
-    });
+sequelize
+	.sync({ force: false })
+	.then(() => {
+		console.log('데이터베이스 연결 성공');
+	})
+	.catch((err) => {
+		console.error(err);
+	});
 
-
-
-
-    //디스코드 봇 설정 
-
+//디스코드 봇 설정
+/*
   //v12  
 // const Discord = require('discord.js');	// discord.js 라이브러리 호출
 //const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES","GUILD_MEMBERS"] })	// Client 객체 생성
@@ -135,9 +131,9 @@ client.on('messageCreate', async msg => {
             const hook = new WebhookClient(data);
         hook.send('hi');
     })
-
+*/
 
 app.listen(5000, () => {
-    console.log('5___port started1');
-    client.login(token);    
-})
+	console.log('5___port started1');
+	// client.login(token);
+});
