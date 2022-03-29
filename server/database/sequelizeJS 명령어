@@ -1,0 +1,16 @@
+
+
+sql 
+ ->  select * from {table명} where 원하는 컬러명 = 원하는 값  
+ findAll(
+       { where: { 원하는 컬럼명 : "원하는 값" } }
+ )
+
+ -> SELECT * FROM publisher WHERE pub_id > 1 AND pub_id < 4
+ models.Publisher.findAll({
+        where: {
+            $and: [{pub_id: {$gt: 1}}, {pub_id: {$lt: 4}}]
+        }
+}).then(function(results) {
+        //TODO: query결과가 담긴 result에 대한 처리 진행
+});
