@@ -2,11 +2,8 @@
 
 const express = require('express');
 const router = express.Router();
-
-router.get('/', (req,res) => {
-   res.send(' accountInfoList Router test중입니다 성공!');
-})
-
+const { registerDiscord } = require('../controller/AccountController')
+router.post('/', registerDiscord);
 
 
 module.exports = router;
