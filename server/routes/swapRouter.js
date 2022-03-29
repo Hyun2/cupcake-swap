@@ -14,9 +14,6 @@ router.get('/', async (req, res) => {
 	}
 });
 
-// router.get('')
+router.get('/openSwap/:swapId', getSwapId);
 
 module.exports = router;
-
-// const { registerDiscord } = require('../controller/AccountController')
-// router.post('/', registerDiscord);
