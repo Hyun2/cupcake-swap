@@ -9,11 +9,12 @@ module.exports = (sequelize, DataTypes) => {
           },
         address: {
             type: DataTypes.STRING(100),
-            allowNull: false,
+            allowNull: true,
             unique: true,
         },
         discordId : {
             type: DataTypes.STRING(100),
+            allowNull: true
         },
     }, {
         charset: "utf8", // 한국어 설정

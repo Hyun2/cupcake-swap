@@ -8,5 +8,5 @@ export const useStore = create((set) => ({
   setWalletAddress: (walletAddress) => set({ walletAddress }),
 
   startSwapStatus: false,
-  setStartSwapStatus: (status) => set({ status }),
+  setStartSwapStatus: (startSwapStatus) => set({ startSwapStatus }),
 }));
