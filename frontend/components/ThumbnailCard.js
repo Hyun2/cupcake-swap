@@ -25,15 +25,21 @@ const Contents = styled.div`
   align-items: center;
 `;
 
-const ThumbnailCard = ({ src }) => {
+const CImage = styled.img`
+  border-radius: 0.25rem;
+  width: 100px;
+  height: 100px;
+`;
+
+const ThumbnailCard = ({ src, children }) => {
   return (
     <ThumbnailContainer>
       {src && (
         <ImageContainer>
-          <Image width="128" height="128" src={src} alt="" />
+          <CImage src={src} alt="" />
         </ImageContainer>
       )}
-      <Contents>테스트</Contents>
+      <Contents>{children}</Contents>
     </ThumbnailContainer>
   );
 };

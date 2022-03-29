@@ -15,7 +15,7 @@ const Container = styled.div`
 const Left = styled.div``;
 
 const Menu = () => {
-  const [startSwapStatus, setStartSwapStatus] = useStore((state) => [state.startSwapStatus, state.setStartSwapStatus]);
+  const [swapStatus, setSwapStatus] = useStore((state) => [state.swapStatus, state.setSwapStatus]);
 
   return (
     <Container>
@@ -38,10 +38,10 @@ const Menu = () => {
       </Left>
 
       <div>
-        {startSwapStatus ? (
+        {swapStatus ? (
           <Button
             onClick={() => {
-              setStartSwapStatus(false);
+              setSwapStatus(false);
             }}
             variant="default"
           >
@@ -50,7 +50,7 @@ const Menu = () => {
         ) : (
           <Button
             onClick={() => {
-              setStartSwapStatus(true);
+              setSwapStatus(true);
             }}
             variant="default"
           >

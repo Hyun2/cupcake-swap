@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { useEffect } from "react";
+import { useStore } from "../utils/store";
 // import Image from "next/image";
 
 const Container = styled.div`
@@ -11,6 +13,11 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+
+  cursor: ${(props) => (props.pointer ? "pointer" : "default")};
+
+  border: ${(props) => (props.selected ? `1px solid #66a64f;` : null)};
+  opacity: ${(props) => (props.selected ? "0.6" : "1")};
 `;
 
 const CImage = styled.img`
@@ -23,9 +30,23 @@ const Contents = styled.div`
   text-align: center;
 `;
 
-const NftCard = ({ src, name, collectionName }) => {
+const NftCard = ({ nft, src, name, collectionName }) => {
+  const myAssets = useStore((state) => state.myAssets);
+  const toggleSelectAsset = useStore((state) => state.toggleSelectAsset);
+  const swapStatus = useStore((state) => state.swapStatus);
+
+  useEffect(() => {
+    console.log(myAssets);
+  }, [myAssets]);
+
   return (
-    <Container>
+    <Container
+      onClick={() => {
+        toggleSelectAsset({ contractAddr: nft.asset_contract?.address, tokenId: nft.id });
+      }}
+      selected={nft.selected}
+      pointer={swapStatus}
+    >
       {/* <CImage width="218" height="218" src={src} alt="" /> */}
       <CImage src={src} alt="" />
       <Contents>
