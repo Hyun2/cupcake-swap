@@ -3,6 +3,7 @@ import Pannel from "../components/Pannel";
 import { useState, useEffect, useCallback } from "react";
 import { useStore } from "../utils/store";
 import NftSwapCard from "../components/NftCard";
+import Web3 from "web3";
 
 const OpenSwaps = () => {
   // return <div>open swaps</div>;
