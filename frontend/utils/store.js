@@ -7,6 +7,25 @@ export const useStore = create((set) => ({
   walletAddress: null,
   setWalletAddress: (walletAddress) => set({ walletAddress }),
 
-  startSwapStatus: false,
-  setStartSwapStatus: (startSwapStatus) => set({ startSwapStatus }),
+  swapStatus: false,
+  setSwapStatus: (swapStatus) => set({ swapStatus }),
+
+  myAssets: [],
+  setMyAssets: (myAssets) => set({ myAssets }),
+  toggleSelectAsset: ({ contractAddr, tokenId }) => {
+    return set((state) => {
+      if (!state.swapStatus) return;
+      return {
+        myAssets: state.myAssets.map((asset) => {
+          if (asset.asset_contract?.address === contractAddr && asset.id === tokenId) {
+            return {
+              ...asset,
+              selected: !asset.selected,
+            };
+          }
+          return asset;
+        }),
+      };
+    });
+  },
 }));
