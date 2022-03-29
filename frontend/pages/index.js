@@ -19,7 +19,7 @@ export default function Home() {
 const Connected = () => {
   const [nfts, setNfts] = useState([]);
   const walletAddress = useStore((state) => state.walletAddress);
-  const [startSwapStatus, setStartSwapStatus] = useStore((state) => [state.startSwapStatus, setStartSwapStatus]);
+  const [swapStatus, setSwapStatus] = useStore((state) => [state.swapStatus, state.setSwapStatus]);
 
   const getNfts = useCallback(async (walletAddress) => {
     const {
@@ -37,7 +37,7 @@ const Connected = () => {
   return (
     <>
       <Pannel>
-        {startSwapStatus && <SelectionBar />}
+        {swapStatus && <SelectionBar />}
         {/* <ThumbnailCard src="https://openseauserdata.com/files/25a27e7885076582601e26d9f1d4296b.svg" /> */}
         <AssetsPannel>
           {nfts.length > 0 &&
