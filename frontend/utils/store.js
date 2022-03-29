@@ -10,6 +10,22 @@ export const useStore = create((set) => ({
   swapStatus: false,
   setSwapStatus: (swapStatus) => set({ swapStatus }),
 
-  selectedAssets: [],
-  setSelectedAssets: (selectedAssets) => set({ selectedAssets }),
+  myAssets: [],
+  setMyAssets: (myAssets) => set({ myAssets }),
+  toggleSelectAsset: ({ contractAddr, tokenId }) => {
+    return set((state) => {
+      if (!state.swapStatus) return;
+      return {
+        myAssets: state.myAssets.map((asset) => {
+          if (asset.asset_contract?.address === contractAddr && asset.id === tokenId) {
+            return {
+              ...asset,
+              selected: !asset.selected,
+            };
+          }
+          return asset;
+        }),
+      };
+    });
+  },
 }));
