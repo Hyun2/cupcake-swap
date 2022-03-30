@@ -26,13 +26,13 @@ const Menu = () => {
           </Link>
         </Button>
         <Button variant="light">
-          <Link href="/open-swaps" passHref>
-            <Text>Open Swaps</Text>
+          <Link href="/proposals" passHref>
+            <Text>Proposals</Text>
           </Link>
         </Button>
         <Button variant="light">
-          <Link href="/recent-swaps" passHref>
-            <Text>Recent Swaps</Text>
+          <Link href="/swaps" passHref>
+            <Text>Swaps</Text>
           </Link>
         </Button>
       </Left>
