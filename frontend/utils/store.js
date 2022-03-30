@@ -10,14 +10,20 @@ export const useStore = create((set) => ({
   swapStatus: false,
   setSwapStatus: (swapStatus) => set({ swapStatus }),
 
+  updateProposalStatus: false,
+  setUpdateProposalStatus: (updateProposalStatus) => set({ updateProposalStatus }),
+
   myAssets: [],
   setMyAssets: (myAssets) => set({ myAssets }),
   toggleSelectAsset: ({ contractAddr, tokenId }) => {
     return set((state) => {
-      if (!state.swapStatus) return;
+      if (!state.swapStatus && !state.updateProposalStatus) {
+        console.log("1");
+        return;
+      }
       return {
         myAssets: state.myAssets.map((asset) => {
-          if (asset.asset_contract?.address === contractAddr && asset.id === tokenId) {
+          if (asset.asset_contract?.address === contractAddr && asset.token_id === tokenId) {
             return {
               ...asset,
               selected: !asset.selected,

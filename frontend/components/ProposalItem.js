@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { Button, ScrollArea } from "@mantine/core";
+import { Button, ScrollArea, Text } from "@mantine/core";
+import Link from "next/link";
 import NftCard from "./NftCard";
 
 const Container = styled.div`
@@ -77,7 +78,11 @@ const ProposalItem = ({ proposal }) => {
         <div>
           <Button>승인</Button>
           <Button>거절</Button>
-          <Button>수정</Button>
+          <Button>
+            <Link href="/proposal/1" passHref>
+              <Text>수정</Text>
+            </Link>
+          </Button>
         </div>
       </Bottom>
     </Container>

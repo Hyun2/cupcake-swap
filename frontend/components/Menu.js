@@ -16,6 +16,7 @@ const Left = styled.div``;
 
 const Menu = () => {
   const [swapStatus, setSwapStatus] = useStore((state) => [state.swapStatus, state.setSwapStatus]);
+  const [myAssets, setMyAssets] = useStore((state) => [state.myAssets, state.setMyAssets]);
 
   return (
     <Container>
@@ -42,6 +43,7 @@ const Menu = () => {
           <Button
             onClick={() => {
               setSwapStatus(false);
+              setMyAssets(myAssets.map((asset) => ({ ...asset, selected: false })));
             }}
             variant="default"
           >

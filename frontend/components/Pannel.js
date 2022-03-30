@@ -5,7 +5,7 @@ const Container = styled.div`
   margin: 10px 0;
   background-color: #f9f7f1;
   padding: 10px;
-  min-height: 500px;
+  min-height: 300px;
 `;
 
 const Pannel = ({ children }) => {

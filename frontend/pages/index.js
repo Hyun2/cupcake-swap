@@ -25,7 +25,7 @@ const Connected = () => {
     async (walletAddress) => {
       const {
         data: { assets },
-      } = await axios.get(`https://api.opensea.io/api/v1/assets?owner=${walletAddress}`);
+      } = await axios.get(`https://rinkeby-api.opensea.io/api/v1/assets?owner=${walletAddress}`);
       // https://rinkeby-api.opensea.io/api/v1/assets?owner=0x6cD3dde9dFf947F8F42aa780D0CCE8f897E8DE5F
       console.log(assets);
       setMyAssets(assets.map((asset) => ({ ...asset, selected: false })));
@@ -49,7 +49,7 @@ const Connected = () => {
               <NftCard
                 key={idx}
                 contractAddr={nft.asset_contract?.address}
-                tokenId={nft.id}
+                tokenId={nft.token_id}
                 selected={nft.selected}
                 name={nft.name}
                 collectionName={nft.collection?.name}

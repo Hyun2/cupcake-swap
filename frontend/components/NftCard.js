@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { useEffect } from "react";
 import { useStore } from "../utils/store";
 // import Image from "next/image";
 
@@ -31,13 +30,13 @@ const Contents = styled.div`
 `;
 
 const NftCard = ({ contractAddr, tokenId, selected, src, name, collectionName }) => {
-  const myAssets = useStore((state) => state.myAssets);
+  // const myAssets = useStore((state) => state.myAssets);
   const toggleSelectAsset = useStore((state) => state.toggleSelectAsset);
   const swapStatus = useStore((state) => state.swapStatus);
 
-  useEffect(() => {
-    console.log(myAssets);
-  }, [myAssets]);
+  // useEffect(() => {
+  //   console.log(myAssets);
+  // }, [myAssets]);
 
   return (
     <Container
