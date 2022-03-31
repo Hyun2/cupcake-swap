@@ -5,11 +5,14 @@ const Container = styled.div`
   margin: 10px 0;
   background-color: #f9f7f1;
   padding: 10px;
-  min-height: 300px;
+  flex-direction: row;
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-between; */
 `;
 
-const Pannel = ({ children }) => {
+const SwapPannel = ({ children }) => {
   return <Container>{children}</Container>;
 };
 
-export default Pannel;
+export default SwapPannel;

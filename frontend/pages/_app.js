@@ -6,14 +6,26 @@ import "../styles/global.css";
 import Web3 from "web3";
 import { useStore } from "../utils/store";
 import { connectMetamask } from "../utils";
+import { useRouter } from "next/router";
 
 export default function App(props) {
   const { Component, pageProps } = props;
   const setWeb3 = useStore((state) => state.setWeb3);
   const setWalletAddress = useStore((state) => state.setWalletAddress);
+  const router = useRouter();
+  const setUpdateProposalStatus = useStore((state) => state.setUpdateProposalStatus);
 
   useEffect(() => {
-    console.log("first");
+    router.events.on("routeChangeStart", (url) => {
+      if (url.includes("/proposal/")) {
+        setUpdateProposalStatus(true);
+      } else {
+        setUpdateProposalStatus(false);
+      }
+    });
+  }, [router.events, setUpdateProposalStatus]);
+
+  useEffect(() => {
     if (typeof window.ethereum !== "undefined") {
       // window.ethereum이 있다면
       try {
