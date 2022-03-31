@@ -154,6 +154,6 @@ client.on('messageCreate', async msg => {
 
 
 app.listen(5000, () => {
-    console.log('5___port started');
+    console.log('5___port startedd');
     client.login(process.env.TOKEN);    
 })
