@@ -5,7 +5,7 @@ const { sequelize } = require('./database/models');
 const fs = require('fs');
 //router import
 const accountRouter = require('./routes/AccountRouter')
-const swapRouter = require('./routes/swapRouter')
+const ProposalRouter = require('./routes/ProposalRouter')
 const { token } = require('./config.json');
 require("dotenv").config();
 
@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use('/account', accountRouter)
-app.use('/swap', swapRouter);
+app.use('/proposal', ProposalRouter);
 
 sequelize.sync({ force: false })
     .then(() => {
@@ -38,13 +38,16 @@ sequelize.sync({ force: false })
 
 
 //v13
-const { Client, Intents, MessageEmbed,WebhookClient } = require("discord.js");
+const { Client, Intents, MessageEmbed,WebhookClient, MessageActionRow,MessageButton } = require("discord.js");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES,Intents.FLAGS.GUILD_MEMBERS,Intents.FLAGS.GUILD_WEBHOOKS] })	// Client 객체 생성
 
-// client.once('ready', () => {
-//     console.log(`Logged in as ${client.user.tag}!`);
+client.once('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
 
-// });
+// client.users.fetch('707854317943783475  ', false).then((user) => {
+//     user.send('hello world');
+//    });
+});
 
 
 // client.fetchWebhook('957190200633733120', "Mzu450xIMgQoHog4AEZ2mE2-LMwWDm6qqyipvZcnhMkd8ZBtCQYZwbPuU3ZTzYzQfEYh")
@@ -53,14 +56,39 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_
 
 
 client.on('messageCreate', async msg => {
-
     //   console.log(msg.author);       
     // const user = await client.users.fetch(msg.author.id);
     // user.send(msg.content);
-  if(msg.webhookId === "957190200633733120"){
-        msg.channel.send(`이건말이여 transaction성공 했을때 보내주는 메세지여~~`);
-    };
     try { 
+    if (msg.webhookId === "958360197607358524") {
+        if (msg.embeds[0].title === "SWAP") {
+          
+            // msg.channel.send(`이건말이여 transaction성공 했을때 보내주는 메세지여~~`); 
+            const user = await client.users.fetch(msg.embeds[0].fields[2].value);
+            const swap = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('primary')
+					.setLabel('Accept')
+                    .setStyle('PRIMARY'),
+                    new MessageButton()
+					.setCustomId('Danger')
+					.setLabel('Reject')
+                    .setStyle('DANGER'),
+                    
+            );
+            //msg.channel.send({ embeds: [msg.embeds[0]], components: [swap] });
+            user.send({ embeds: [msg.embeds[0]], components: [swap] });
+            const collector = msg.channel.createMessageComponentCollector({
+                time: 10 * 1000
+            })
+            collector.on("collect", async (msg) => {
+                console.log('collect');
+            })
+        }
+       
+    };
+    
         // !ping 
             if (msg.content === '!야') msg.channel.send(`!호`); // 채팅에서 메세지가 들어왔을 때 실행할 콜백함수입니다.
     
@@ -77,8 +105,9 @@ client.on('messageCreate', async msg => {
         }
             
        
-        if (msg.content.startsWith("안녕하세요")) { //메세지가 /안녕 으로 시작된다면
-            msg.channel.send("안녀엉! 우리는 BLSTUDY그룹이야 잘부탁해!!") //안녀엉! 이라는 메세지를 채널에 전송합니다.
+        if (msg.content.startsWith("안녕")) { //메세지가 /안녕 으로 시작된다면
+            console.log(msg.author);
+            msg.channel.send(`안녀엉!  <@${msg.author.id}>!`) //안녀엉! 이라는 메세지를 채널에 전송합니다.
         }
       
         if (msg.content === 'ch') {
@@ -119,26 +148,12 @@ client.on('messageCreate', async msg => {
       .send({ embeds: [embed] });
  });
   
-    app.get('/', async(req, res) => {    
-            // const result = await axios.post("https://discord.com/api/webhooks/957190200633733120/Mzu450xIMgQoHog4AEZ2mE2-LMwWDm6qqyipvZcnhMkd8ZBtCQYZwbPuU3ZTzYzQfEYh", {
-            //     "content": "트랜잭션이 발 생했어요!!"
-            // })
-        
-            const data = {
-                id : process.env.WEBHOOKID,
-                token : process.env.WEBHOOKTOKEN
-            }
-            const embed = new MessageEmbed()
-                        .setTitle("transaction Success") // 1 - embed의 제목을 담당합니다.
-                        .setColor("PURPLE") // 2 - embed 사이드 바의 색을 정합니다.
-                        .setDescription('곧있으면 transaction 성공한 자료들을 넣어서 꾸며볼게요'); // 3 - 실제로 설명을 담당하는 곳입니다.
-                       
-            const hook = new WebhookClient(data);
-        hook.send('hi');
-    })
+ client.on('clickButton', async (button) => {
+	console.log('button click');
+ });
 
 
 app.listen(5000, () => {
-    console.log('5___port started1');
-    // client.login(token);    
+    console.log('5___port started');
+    client.login(token);    
 })

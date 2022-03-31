@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const swapProposalList= sequelize.define("swapProposalList", {
+    const Proposals = sequelize.define("Proposals", {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(100),
             allowNull: false,
         },
-        offeredAddress: {
+        offerAddress: {
             type: DataTypes.STRING(100),
             allowNull: false,
         },
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER(255),
             allowNull: true,
         },
-        offeredAddress: {
+        offeredAmount: {
             type: DataTypes.INTEGER(255),
             allowNull: true,
         },
@@ -31,14 +31,15 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER(100),
         },
         status : {
-            type: DataTypes.BOOLEAN
+            type: DataTypes.STRING(100),
+            allowNull: false,
         },
     }, {
         charset: "utf8", // 한국어 설정
         collate: "utf8_general_ci", // 한국어 설정
-        tableName: "swapProposalList", // 테이블 이름 정의
+        tableName: "Proposals", // 테이블 이름 정의
         timestamps: true, // createAt, updateAt 활성화
         //paranoid: true, // deleteAt 옵션
     });
-    return swapProposalList;
+    return Proposals;
 };
