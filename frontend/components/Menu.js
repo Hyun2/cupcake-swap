@@ -16,6 +16,7 @@ const Left = styled.div``;
 
 const Menu = () => {
   const [swapStatus, setSwapStatus] = useStore((state) => [state.swapStatus, state.setSwapStatus]);
+  const [myAssets, setMyAssets] = useStore((state) => [state.myAssets, state.setMyAssets]);
 
   return (
     <Container>
@@ -26,13 +27,13 @@ const Menu = () => {
           </Link>
         </Button>
         <Button variant="light">
-          <Link href="/open-swaps" passHref>
-            <Text>Open Swaps</Text>
+          <Link href="/proposals" passHref>
+            <Text>Proposals</Text>
           </Link>
         </Button>
         <Button variant="light">
-          <Link href="/recent-swaps" passHref>
-            <Text>Recent Swaps</Text>
+          <Link href="/swaps" passHref>
+            <Text>Swaps</Text>
           </Link>
         </Button>
       </Left>
@@ -42,6 +43,7 @@ const Menu = () => {
           <Button
             onClick={() => {
               setSwapStatus(false);
+              setMyAssets(myAssets.map((asset) => ({ ...asset, selected: false })));
             }}
             variant="default"
           >
