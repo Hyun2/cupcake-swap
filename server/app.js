@@ -6,7 +6,7 @@ const fs = require('fs');
 //router import
 const accountRouter = require('./routes/AccountRouter')
 const ProposalRouter = require('./routes/ProposalRouter')
-const { token } = require('./config.json');
+
 require("dotenv").config();
 
 
@@ -155,5 +155,5 @@ client.on('messageCreate', async msg => {
 
 app.listen(5000, () => {
     console.log('5___port started');
-    client.login(token);    
+    client.login(process.env.TOKEN);    
 })
