@@ -5,6 +5,7 @@ sql
  findAll(
        { where: { 원하는 컬럼명 : "원하는 값" } }
  )
+ findOne = 하나의 데이터만 select할때 
 
  -> SELECT * FROM publisher WHERE pub_id > 1 AND pub_id < 4
  models.Publisher.findAll({
