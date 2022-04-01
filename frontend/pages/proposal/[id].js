@@ -82,9 +82,10 @@ export default function ProposalDetail() {
       </Pannel>
 
       <Pannel>
-        {proposals.map((proposal, idx) => (
+        <TradeItem trade={proposals[0]} type="swapDetail" />
+        {/* {proposals.map((proposal, idx) => (
           <TradeItem proposal={proposal} key={idx} />
-        ))}
+        ))} */}
       </Pannel>
     </>
   );
