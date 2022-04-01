@@ -85,10 +85,11 @@ const TradeItem = React.forwardRef(({ trade, type, onClick, href }, ref) => {
       </NftRow>
       <Bottom>
         {type === "proposal" && <div>제안 상태: 제안 중 / 승인 / 거절</div>}
+        {type === "proposalDetail" && <div>제안 상태: 제안 중 / 승인 / 거절</div>}
         {type === "swap" && <div>스왑 상태: Request / Response / Accept / Completed / Canceled</div>}
         {type === "swapDetail" && <div>스왑 상태: Request / Response / Accept / Completed / Canceled</div>}
 
-        {type === "proposal" && (
+        {(type === "proposal" || type === "proposalDetail") && (
           <div>
             <Button>승인</Button>
             <Button>거절</Button>

@@ -19,9 +19,10 @@ const SwapDetail = () => {
         ]}
       />
       <Pannel>
-        {swaps.map((swap, idx) => (
+        {/* {swaps.map((swap, idx) => (
           <TradeItem trade={swap} key={idx} type="swapDetail" />
-        ))}
+        ))} */}
+        <TradeItem trade={swaps[0]} type="swapDetail" />
       </Pannel>
     </div>
   );
