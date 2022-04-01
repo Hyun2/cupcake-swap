@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "@emotion/styled";
 import { Button, ScrollArea, Text } from "@mantine/core";
 import Link from "next/link";
@@ -8,6 +9,15 @@ const Container = styled.div`
   border-radius: 0.25rem;
   margin-bottom: 20px;
   padding: 10px;
+
+  &:hover {
+    cursor: ${(props) => (props.type === "swap" ? "pointer" : "default")};
+    transform: ${(props) => (props.type === "swap" ? "translateY(-2px)" : null)};
+    box-shadow: ${(props) => (props.type === "swap" ? "rgb(4 17 29 / 25%) 0px 0px 8px 0px" : null)};
+    transition: ${(props) => (props.type === "swap" ? "all 0.1s ease 0s" : null)};
+  }
+}
+
 `;
 
 const NftRow = styled.div`
@@ -41,12 +51,13 @@ const Bottom = styled.div`
   }
 `;
 
-const ProposalItem = ({ proposal }) => {
+// eslint-disable-next-line react/display-name
+const TradeItem = React.forwardRef(({ trade, type, onClick, href }, ref) => {
   return (
-    <Container>
+    <Container type={type} onClick={onClick} href={href} ref={ref}>
       <NftRow>
         <NftList>
-          {proposal.user1?.nfts?.map((nft, idx) => (
+          {trade.user1?.nfts?.map((nft, idx) => (
             <NftCard
               key={idx}
               contractAddr={nft.address}
@@ -59,7 +70,7 @@ const ProposalItem = ({ proposal }) => {
           ))}
         </NftList>
         <NftList>
-          {proposal.user2?.nfts?.map((nft, idx) => (
+          {trade.user2?.nfts?.map((nft, idx) => (
             <NftCard
               key={idx}
               contractAddr={nft.address}
@@ -73,20 +84,31 @@ const ProposalItem = ({ proposal }) => {
         </NftList>
       </NftRow>
       <Bottom>
-        <div>제안 상태: 제안 중 / 승인 / 거절</div>
+        {type === "proposal" && <div>제안 상태: 제안 중 / 승인 / 거절</div>}
+        {type === "swap" && <div>스왑 상태: Request / Response / Accept / Completed / Canceled</div>}
+        {type === "swapDetail" && <div>스왑 상태: Request / Response / Accept / Completed / Canceled</div>}
 
-        <div>
-          <Button>승인</Button>
-          <Button>거절</Button>
-          <Button>
-            <Link href="/proposal/1" passHref>
-              <Text>수정</Text>
-            </Link>
-          </Button>
-        </div>
+        {type === "proposal" && (
+          <div>
+            <Button>승인</Button>
+            <Button>거절</Button>
+            <Button>
+              <Link href="/proposal/1" passHref>
+                <Text>수정</Text>
+              </Link>
+            </Button>
+          </div>
+        )}
+        {type === "swapDetail" && (
+          <div>
+            <Button>Request</Button>
+            <Button>Response</Button>
+            <Button>Accept</Button>
+          </div>
+        )}
       </Bottom>
     </Container>
   );
-};
+});
 
-export default ProposalItem;
+export default TradeItem;
