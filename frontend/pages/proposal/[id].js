@@ -4,7 +4,7 @@ import { useCallback, useEffect } from "react";
 import AssetsPannel from "../../components/AssetsPannel";
 import NftCard from "../../components/NftCard";
 import Pannel from "../../components/Pannel";
-import ProposalItem from "../../components/ProposalItem";
+import TradeItem from "../../components/TradeItem";
 import { proposals } from "../../utils/dummy";
 import { useStore } from "../../utils/store";
 
@@ -83,7 +83,7 @@ export default function ProposalDetail() {
 
       <Pannel>
         {proposals.map((proposal, idx) => (
-          <ProposalItem proposal={proposal} key={idx} />
+          <TradeItem proposal={proposal} key={idx} />
         ))}
       </Pannel>
     </>

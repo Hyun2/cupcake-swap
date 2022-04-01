@@ -2,6 +2,7 @@
 
 /**/package-lock.json
 cupcake-swap.code-workspace
+/**/node_modules
 
 # dependencies
 /node_modules
