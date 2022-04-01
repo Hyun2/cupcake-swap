@@ -35,7 +35,7 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 db.AccountInfoList = require('./AccountInfoList')(sequelize,Sequelize);
-db.swapProposalList = require('./swapProposalList')(sequelize,Sequelize);
+db.Proposals = require('./Proposals')(sequelize,Sequelize);
 db.nftInfo = require('./nftInfo')(sequelize,Sequelize);
 
 module.exports = db;

@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
         tokenId : {
             type: DataTypes.STRING(255),
         },
+        imgURL: {
+            type: DataTypes.STRING(255),
+        },
     }, {
         charset: "utf8", // 한국어 설정
         collate: "utf8_general_ci", // 한국어 설정
