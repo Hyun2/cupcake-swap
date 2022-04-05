@@ -7,6 +7,7 @@ const Container = styled.div`
 `;
 
 const AssetsPannel = ({ children }) => {
+  
   return <Container>{children}</Container>;
 };
 

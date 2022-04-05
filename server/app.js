@@ -6,7 +6,7 @@ const fs = require('fs');
 //router import
 const accountRouter = require('./routes/AccountRouter')
 const ProposalRouter = require('./routes/ProposalRouter')
-
+const { proposals } = require('./database_mongo/models/proposals')
 require("dotenv").config();
 
 
@@ -16,16 +16,69 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use('/account', accountRouter)
-app.use('/proposal', ProposalRouter);
-
-sequelize.sync({ force: false })
-    .then(() => {
-        console.log('데이터베이스 연결 성공');
+app.use('/proposals', ProposalRouter);
+app.get('/saveData', () => {
+    const testData =   {
+        id: 1,
+        user1: {
+          proposal : 1,
+          address: "0x6cD3dde9dFf947F8F42aa780D0CCE8f897E8DE5F",
+          nfts: [
+            {
+              address: "0x02e81f5e8bf8b19d0e1f3ad4a4eea757402b6cc0",
+              id: "10",
+              imageUrl:
+                "https://lh3.googleusercontent.com/Q5V9Q0PLsQqpMXaj39_CgcxVdoBQxNf1fNyJtSyA3wcgm5Fkgh9-sv97aIIgJZbPy1sC6dFFAtiZyD82cz7EoQXvkFXeLZBVK8JwEA",
+            },
+            {
+              address: "0x690071b9354031e135b8332ff10e4ad6ddfaf48e",
+              id: "4",
+              imageUrl:
+                "https://lh3.googleusercontent.com/BWKgKXz6JbnK-H1r-n-3xE_wRJNAD3nGylSW-o6clV2GRs1Mn_xmdMXIZ0jIL5ot4-e1P7iy4lWHaNnwJ3S-V4SgFna7PejHbxdJ",
+            },
+          ],
+          ether: 0,
+        },
+        user2: {
+          address: "0xfF4F6981A042a7F161ac699D58c745bAe5B0d839",
+          nfts: [
+            {
+              address: "0x02e81f5e8bf8b19d0e1f3ad4a4eea757402b6cc0",
+              id: "10",
+              imageUrl:
+                "https://lh3.googleusercontent.com/Q5V9Q0PLsQqpMXaj39_CgcxVdoBQxNf1fNyJtSyA3wcgm5Fkgh9-sv97aIIgJZbPy1sC6dFFAtiZyD82cz7EoQXvkFXeLZBVK8JwEA",
+            },
+          ],
+          ether: 0,
+        },
+      }
+    const data = new proposals(testData);
+    data.save((err, res) => {
+        if (err) return console.log(err);
+        console.log(res);
     })
-    .catch((err) => {
-        console.error(err);
-    });
+})
+// sequelize.sync({ force: false })
+//     .then(() => {
+//         console.log('데이터베이스 연결 성공');
+//     })
+//     .catch((err) => {
+//         console.error(err);
+//     });
 
+
+
+
+//DB connect
+const mongoose = require('mongoose');
+console.log(process.env.MONGDB);
+mongoose
+	.connect(
+		process.env.MONGDB,
+		{ useNewUrlParser: true }
+	)
+	.then(() => console.log('MongoDB Connected success !!'))
+	.catch((err) => console.log(err));
 
 
 
