@@ -5,6 +5,7 @@
 const express = require('express');
 const app = express();
 const cors = require("cors");
+const mongoose = require('mongoose');
 require("dotenv").config();
 //router import
 const accountRouter = require('./routes/AccountRouter')
@@ -12,27 +13,48 @@ const ProposalRouter = require('./routes/ProposalRouter')
 const { proposals } = require('./database_mongo/models/proposals')
 
 
+class Server {
+	app;
+	constructor() {
+		const app = express();
+		this.app = app;
+	}
 
-// '/'로 들어오는 요청은 기본적으로 indexRouter로 이동해서 된다.
+	setRoute() {
+	this.app.use('/accounts', accountRouter)
+	this.app.use('/proposals', ProposalRouter);
+	}
 
-app.use(express.json());
-app.use(cors());
-app.use(express.urlencoded({ extended: false }));
-app.use('/accounts', accountRouter)
-app.use('/proposals', ProposalRouter);
+	setMiddleware() {
+	//* json middleware
+      this.app.use(express.json());
+	//* cors middleware
+      this.app.use(cors());
+      this.app.use(express.urlencoded({ extended: false }));
+	  this.setRoute();
+	}
 
+	setMongoDB() {	
+     mongoose
+     .connect(
+     	process.env.MONGDB,
+     	{ useNewUrlParser: true }
+     )
+     .then(() => console.log('MongoDB Connected success !!'))
+     .catch((err) => console.log(err));
+	}
 
-//DB connect
-const mongoose = require('mongoose');
-console.log(process.env.MONGDB);
-mongoose
-	.connect(
-		process.env.MONGDB,
-		{ useNewUrlParser: true }
-	)
-	.then(() => console.log('MongoDB Connected success !!'))
-	.catch((err) => console.log(err));
+	listen() {
+		this.setMiddleware();
+		this.setMongoDB();
+		this.app.listen(5000, () => {
+			console.log('5___port startedd');
+		})
+	}
+}
 
-app.listen(5000, () => {
-    console.log('5___port startedd');
-})
+const init = () => {
+	const server = new Server();
+	server.listen();
+}
+init();

@@ -1,24 +1,12 @@
 
 const { accounts } = require('../database_mongo/models/accounts');
 const { proposals } = require('../database_mongo/models/proposals');
-// const { Client, Intents, MessageEmbed, WebhookClient, MessageButton, MessageActionRow } = require("discord.js");
 const { Client, Intents, MessageEmbed,WebhookClient, MessageActionRow,MessageButton } = require("discord.js");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES,Intents.FLAGS.GUILD_MEMBERS,Intents.FLAGS.GUILD_WEBHOOKS] })	// Client 객체 생성
-// const client = new Client({
-// 	intents:
-// 		[
-// 		Intents.FLAGS.GUILDS,
-// 		Intents.FLAGS.GUILD_MESSAGES,
-// 		Intents.FLAGS.GUILD_MEMBERS,
-// 		Intents.FLAGS.GUILD_WEBHOOKS
-// 		]
-// })	// Client 객체 생성
 require("dotenv").config();
 
 
 const sendEmbed = async (proposedAddress,offeredAddress,proposalId) => {
-	
-
     try {
         //  ---- DB에서 계정에 해당하는 discordId를 찾아와야합니다.  -----
         const addrInfo = await accounts.findOne({ address: offeredAddress });
@@ -65,10 +53,6 @@ const sendEmbed = async (proposedAddress,offeredAddress,proposalId) => {
             .setColor("PURPLE") // 2 - embed 사이드 바의 색을 정합니다.
             // 3 - 실제로 설명을 담당하는 곳입니다.
             .setImage("https://lh3.googleusercontent.com/Q5V9Q0PLsQqpMXaj39_CgcxVdoBQxNf1fNyJtSyA3wcgm5Fkgh9-sv97aIIgJZbPy1sC6dFFAtiZyD82cz7EoQXvkFXeLZBVK8JwEA")
-
-    
-    
-	
         // // discordId를 통해서 보내주는 작업
         // const embed = makeEmbed(proposedAddress,offeredAddress,swapId,discordId)
         const hook = new WebhookClient(discordData);
@@ -94,11 +78,11 @@ const makeCompo = () => {
             new MessageButton()
                 .setCustomId('accept')
                 .setLabel('Accept')
-                .setStyle('PRIMARY'),
+                .setStyle('SUCCESS'),
                 new MessageButton()
                 .setCustomId('reject')
-                .setLabel('Reject')
-                .setStyle('DANGER'),
+                .setLabel('Reject')  
+                .setStyle('SECONDARY'),
                 new MessageButton()
                 .setCustomId('close')
                 .setLabel('close')
@@ -112,73 +96,93 @@ const makeCompo = () => {
 
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-
-// client.users.fetch('707854317943783475  ', false).then((user) => {
-//     user.send('hello world');
-//    });
-    
-// client.fetchWebhook('957190200633733120', "Mzu450xIMgQoHog4AEZ2mE2-LMwWDm6qqyipvZcnhMkd8ZBtCQYZwbPuU3ZTzYzQfEYh")
-//   .then(webhook => webhook.send('난 이제 살아 있어요!'))
-//   .catch(console.error);
-
-
 });
 
 
 client.on('messageCreate', async msg => {
-    //   console.log(msg.author);       
-    // const user = await client.users.fetch(msg.author.id);
-    // user.send(msg.content);
     try { 
     if (msg.webhookId === "958360197607358524") {
         if (msg.embeds[0].title === "SWAP") {
          // user.send({ embeds: [msg.embeds[0]], components: [swap] });
-            const user1 = await client.users.fetch(msg.embeds[0].fields[2].value);
+            const user1 = await client.users.fetch('961855942436200448');
             const user2 = await client.users.fetch(msg.embeds[0].fields[2].value);
             const proposalId = msg.embeds[0].fields[4].value;
-            const swap = makeCompo();
+            const swap = makeCompo(proposalId);
 
             const everyone = msg.guild;
-             //console.log('everyone',everyone);
             msg.guild.channels.create(`proposalId ${proposalId}`, {
                 type: 'text',
                 parent: "957914803895148574",
                 permissionOverwrites: [ 
-                   
+                    {
+                        id: everyone.id,
+                        deny: 'VIEW_CHANNEL'
+                    },
                     {
                         id: user2.id,
                         allow : 'VIEW_CHANNEL'
                     },
-                    // {
-                    //     id: user2.id,
-                    //     deny: 'VIEW_CHANNEL'
-                    //   },
                 ]
             }).then((result) => {
                 const channelId = result.id;
-                client.channels.cache.get(channelId).send({ embeds: [msg.embeds[0]], components: [swap] });
-                client.channels.cache.get(channelId).send("<@" + msg.embeds[0].fields[2].value  + ">");
-                client.channels.cache.get(channelId).send("<@" + "401389655305617408" + ">");
+                const channel = client.channels.cache.get(channelId);
+                channel.send({ embeds: [msg.embeds[0]], components: [swap] });
+                channel.send("<@" + msg.embeds[0].fields[2].value  + ">");
+                channel.send("<@" + user1.id + ">");
 
+
+                //! 버튼반응 시간을 결정해 주는 곳 || filter도 정할 수 있음. 
                 const collector = client.channels.cache.get(channelId).createMessageComponentCollector({
                     time: 1000 * 1000
                 })
 
-
+                //! 버튼반응 결과가 나오는 곳 
                 collector.on("collect", async (interaction) => {
-                    
                     if (interaction.customId === "accept") {
-                        //console.log(interaction.customId,msg.embeds[0].fields[4].value);
-                        interaction.reply("수락하셨습니다!.");
-                        client.channels.cache.get(channelId).permissionOverwrites.create(user1.id, {VIEW_CHANNEL: true, SEND_MESSAGES: false});
-                    } else if(interaction.customId === "reject"){
-                        interaction.reply("거절했기 때문에 채널을 삭제하겠씁니다")
+                      
+                        const result = await proposals.updateOne({proposalId }, { status:"accept" })
+                        if (result.modifiedCount > 0) {
+                            const compo = new MessageActionRow()
+                                .addComponents(
+                                    new MessageButton()
+                                        .setLabel('Accept')
+                                        .setURL(`http://localhost:3000/proposal/${proposalId}`)
+                                        .setStyle('LINK'),
+                                )
+                            client.channels.cache.get(channelId).permissionOverwrites.create(user1.id, { VIEW_CHANNEL: true, SEND_MESSAGES: false });
+                            await interaction.update({ content: "<@" + user1.id + ">", components: [compo] });
+                        } else {
+                            return
+                        }
+                     
+                    } else if (interaction.customId === "reject") {
+                        const result = await proposals.updateOne({ proposalId }, { status: "reject" })
+                        if (result.modifiedCount > 0) {
+                            await interaction.update({ content: "<@" + user1.id + ">"+user2.id+" reject your proposal"+proposalId, components: [] });
+                        } else {
+                            console.log('reject DB변환 실패');
+                            return
+                        }
+                      
                     } else if (interaction.customId === "close") {
-                        user1.send("user2가 제안을 거절했습니다.")
-                        interaction.guild.channels.cache.get(channelId).delete();                        
+                        const result = await proposals.updateOne({ proposalId }, { status: "reject" })
+                        if (result.modifiedCount > 0) {
+                            user1.send("user2가 제안을 거절했습니다.")
+                            interaction.reply("거절했기 때문에 채널을 삭제하겠씁니다")
+                            interaction.guild.channels.cache.get(channelId).delete();                 
+                        } else {
+                            console.log('reject DB변환 실패');
+                            return
+                        }
+                     
+                            
                     }
                    
                 })
+
+                collector.on("end", async (collect) => {
+                    console.log(collect,"시간이 초과됬어요");
+                } )
             })
 
             //msg.channel.get('960918644269920316').send({ embeds: [msg.embeds[0]], components: [swap] });
