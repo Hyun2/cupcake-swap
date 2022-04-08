@@ -20,14 +20,16 @@ export default function ProposalDetail() {
   const router = useRouter();
   const { id } = router.query;
  
-  
+
   useEffect(async () => {
 
     setUpdateProposalStatus(true);
     //undefind일때는 안되게!
     if (id) {
       const serverAsset = await axios.get(`http://localhost:5000/proposals/proposal/${id}`);
-      setNft(serverAsset.data.user1.nfts)
+      if (serverAsset.data.status === 'pending') {
+        setNft(serverAsset.data.user1.nfts)
+      }
       //await axios.get(`https://rinkeby-api.opensea.io/api/v1/assets?owner=${walletAddress}`)
     }
   
@@ -74,8 +76,7 @@ export default function ProposalDetail() {
   //   //https://api.opensea.io/api/v1/assets?owner=${address}
   //   walletAddress && getNfts(walletAddress);
   // }, [getNfts, walletAddress]);
-   
- console.log(nfts);
+
   return (
     <>
       <Pannel>

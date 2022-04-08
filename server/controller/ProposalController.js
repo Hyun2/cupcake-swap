@@ -1,154 +1,56 @@
-const { Proposals,proposedNftInfo,offeredNftInfo,AccountInfoList, sequelize } = require('../database/models');
-const { Client, Intents, MessageEmbed,WebhookClient, MessageButton,MessageActionRow } = require("discord.js");
-const client = new Client({
-	intents:
-		[
-		Intents.FLAGS.GUILDS,
-		Intents.FLAGS.GUILD_MESSAGES,
-		Intents.FLAGS.GUILD_MEMBERS,
-		Intents.FLAGS.GUILD_WEBHOOKS
-		]
-})	// Client 객체 생성
+//const { Proposals,proposedNftInfo,offeredNftInfo,AccountInfoList, sequelize } = require('../database/models');
 
-const { proposals} = require('../database_mongo/models/proposals');
+const { proposals } = require('../database_mongo/models/proposals');
+const { accounts } = require('../database_mongo/models/accounts');
+const { sendEmbed } = require('./discord'); // discord.js에서 embed를 보내기위한 양식을 만드는 함수.
+const { makeData } = require('./dataForm');  //save함수를 사용하는데 있어서 dataForm을 재사용하기위한 함수
 
-const makeEmbed = (proposedAddress,offerAddress,proposalId,discordId) => {
-	//임베드만드는 기본 양식 함수 
-	const embed = new MessageEmbed()
-		.setTitle("SWAP") // 1 - embed의 제목을 담당합니다
-		.setDescription(`${proposedAddress} PROPOSE to ${offerAddress}`)
-	    .setFields([
-		{
-			name: `proposal Address`,
-			value: `[${proposedAddress}](https://ropsten.etherscan.io/address/${proposedAddress})`,
-			inline : true
-		},
-		{
-			name: `offerd Address`,
-			value: `[${offerAddress}](https://ropsten.etherscan.io/address/${offerAddress})`,
-			inline : true
-			},
-		
-		{
-			name: `discordId`,
-			value: `${discordId}`,
-			inline : true
-		},
-		{
-			name: `openSwap URL`,
-			value: `[swapURL](http://localhost:3000/propoposal/${proposalId})`,
-			inline : true
-		}
-
-	])
-	.setColor("PURPLE") // 2 - embed 사이드 바의 색을 정합니다.
-	 // 3 - 실제로 설명을 담당하는 곳입니다.
-	
-	  return embed
-}
 
 
 // 데이터 형식에 맞춰서 재사용하기 위한 함수를 제작 
 
-const makeData = (proposalId,proposedAddress,offeredAddress) => {
-	return {
-		proposalId : proposalId,
-        user1: {
-          address: proposedAddress,
-          nfts: [
-            {
-              address: "0x02e81f5e8bf8b19d0e1f3ad4a4eea757402b6cc0",
-              id: "10",
-              imageUrl:
-                "https://lh3.googleusercontent.com/Q5V9Q0PLsQqpMXaj39_CgcxVdoBQxNf1fNyJtSyA3wcgm5Fkgh9-sv97aIIgJZbPy1sC6dFFAtiZyD82cz7EoQXvkFXeLZBVK8JwEA",
-            },
-            {
-              address: "0x690071b9354031e135b8332ff10e4ad6ddfaf48e",
-              id: "4",
-              imageUrl:
-                "https://lh3.googleusercontent.com/BWKgKXz6JbnK-H1r-n-3xE_wRJNAD3nGylSW-o6clV2GRs1Mn_xmdMXIZ0jIL5ot4-e1P7iy4lWHaNnwJ3S-V4SgFna7PejHbxdJ",
-            },
-          ],
-          ether: 0,
-        },
-        user2: {
-          address: offeredAddress,
-          nfts: [
-            {
-              address: "0x02e81f5e8bf8b19d0e1f3ad4a4eea757402b6cc0",
-              id: "10",
-              imageUrl:
-                "https://lh3.googleusercontent.com/Q5V9Q0PLsQqpMXaj39_CgcxVdoBQxNf1fNyJtSyA3wcgm5Fkgh9-sv97aIIgJZbPy1sC6dFFAtiZyD82cz7EoQXvkFXeLZBVK8JwEA",
-            },
-          ],
-          ether: 0,
-        },
-      }
-}
-
-
 module.exports = {
-	registerDiscord: async (req, res) => {
-		try {
-			const address = req.body.address;
-			const discordId = req.body.discordId;
-			console.log(address, discordId);
-			const result = await AccountInfoList.create({ address, discordId });
-			res.send(' accountInfoList Router test중입니다 성공!');
-		} catch (e) {
-			console.log('discordId save failed');
-		}
-	},
+	
 	proposalSwap: async (req, res) => {
 
 	//  ---- 필요한 데이터를 프론트에서 받아옵니다. -----
-	   const swapId = await proposals.count('proposals').exec()
-		// const proposedNfts = JSON.parse(req.body.proposedNfts).data;
-		// const offeredNfts = JSON.parse(req.body.offeredNfts).data;
-		// const netWork = req.body.netWork
-		const proposedAddress = req.body.proposedAddress;
-		const offeredAddress = req.body.offeredAddress;
-		const proposedAmount = 0;
-		const offeredAmount = 0;
-
-		const testData = makeData(swapId, proposedAddress, offeredAddress)
-		const data = new proposals(testData);
-		data.save((err, res) => {
-			if (err) return console.log(err);
-			console.log(res);
-		})
-
-
 	
-	 //---- 먼저 swapProposalList에 들어온 proposal를 적재합시다.-----	
-	  
-	// 	try { 
-	//  //  ---- DB에서 계정에 해당하는 discordId를 찾아와야합니다.  -----
-	// 	const addrInfo = await AccountInfoList.findOne({ where: { address: offeredAddress } })
-	//     const discordId = (addrInfo.discordId);
-	// 	const data = {
-	// 		id : process.env.WEBHOOKID,
-	// 		token : process.env.WEBHOOKTOKEN
-	// 	}
-
-	// // discordId를 통해서 보내주는 작업
-	// 	const embed = makeEmbed(proposedAddress,offeredAddress,swapId,discordId)
-	// 	const hook = new WebhookClient(data);
-	// 	hook.send({ embeds: [embed]})
-	// 	return res.json({data:"success"})
+	// 	const proposedNfts = JSON.parse(req.body.proposedNfts).data;
+	// 	const offeredNfts = JSON.parse(req.body.offeredNfts).data;
+	// 	const netWork = req.body.netWork
+	// 	const proposedAmount = 0;
+	// 	const offeredAmount = 0;
 		
-	// 	}catch(error) {
-	// 		console.log(error);
-	// 		return
-	// 	}
+	
+		try {
+		const proposalId = (await proposals.count('id').exec())+1;
+	    const proposedAddress = req.body.proposedAddress;
+		const offeredAddress = req.body.offeredAddress;
+	//---- 먼저 swapProposalList에 들어온 proposal 데이터를 DB에 올리기-----	
+		const form = makeData(proposalId, proposedAddress, offeredAddress)
+		const data = new proposals(form);
+		data.save(async (err, success) => {
+			if (err) throw err;
+
+	//전송이 성공하면 1 실패하면 -1
+			const result = await sendEmbed(proposedAddress, offeredAddress, proposalId);
+			if (result > 0) {
+				return res.json({ data: "success" })
+			} else {
+				return res.json({ data: "fail" })
+			}
+		})
+			
+		} catch (error) {
+			console.log(error);	
+			return
+		}
 	},
 	getProposal: async(req,res) => {
 		// 제안을 받아서 페이지에서 제안된 NFT를 보여주는 모습이 나와야 합니다. 
-
-		const proposalId = Number(req.params.id);
-		const isCheck = await proposals.findOne({proposalId});
-    
 		try {
+			const proposalId = Number(req.params.id);
+			const isCheck = await proposals.findOne({proposalId});
 			if (isCheck.status === 'pending') {
 				return res.json(isCheck)
 			} else {
@@ -174,7 +76,7 @@ module.exports = {
 		// 수락을 했기에 상태를 변경시켜준다.
 		const proposalId = req.body.proposalID;
         const status = "accept"
-		const result = await proposals.updateOne({ swapId : proposalId }, { status })
+		const result = await proposals.updateOne({proposalId }, { status })
 		if (result.modifiedCount > 0) {
 			return res.json('success' );
 		} else {
@@ -185,8 +87,7 @@ module.exports = {
 		// 상태 accpet, pending, reject
 		const proposalId = req.body.proposalID;
         const status = "reject"
-		const result = await proposals.updateOne({ swapId : proposalId }, { status })
-		console.log(result.modifiedCount);
+		const result = await proposals.updateOne({ proposalId }, { status })
 		if (result.modifiedCount > 0) {
 			return res.json( 'success' );
 		} else {

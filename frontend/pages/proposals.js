@@ -14,13 +14,12 @@ export default function Proposals() {
      const rawData = await axios.get(`http://localhost:5000/proposals/`)
      setData(rawData.data.data);
    }, []);
-  
-  console.log(data);
+
 
   return (
     <Pannel>
       {data.map((nft, idx) => (
-        <Link href="/proposal/1" passHref key={idx}>
+        <Link href={`/proposal/${nft.proposalId}`} passHref key={idx}>
           <TradeItem trade={nft} type="proposal" />
           {/* <Text>xptm</Text> */}
         </Link>
