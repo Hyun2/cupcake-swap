@@ -171,7 +171,7 @@ client.on('messageCreate', async msg => {
                             interaction.reply("거절했기 때문에 채널을 삭제하겠씁니다")
                             interaction.guild.channels.cache.get(channelId).delete();                 
                         } else {
-                            console.log('reject DB변환 실패');
+                            console.log('reject DB변환 실패!');
                             return
                         }
                      
