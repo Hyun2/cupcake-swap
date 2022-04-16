@@ -52,6 +52,7 @@ const NftCard = ({ contractAddr, tokenId, selected, src, name, collectionName })
   //   console.log(myAssets);
   // }, [myAssets]);
 
+
   return (
     <Container
       onClick={() => {
