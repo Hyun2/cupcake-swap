@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AppShell, Burger, Header, MediaQuery, Navbar, Text } from "@mantine/core";
 import HeaderContents from "./HeaderContents";
 import Menu from "./Menu";
+import Link from "next/link";
 // import Header from "./Header";
 
 const Layout = ({ children }) => {
@@ -24,7 +25,9 @@ const Layout = ({ children }) => {
             <MediaQuery largerThan="sm" styles={{ display: "none" }}>
               <Burger opened={opened} onClick={() => setOpened((o) => !o)} size="sm" mr="xl" />
             </MediaQuery>
-            <h1>Cupcake Swap</h1>
+            <Link href="/">
+              <h1 style={{ cursor: "pointer" }}>Cupcake Swap</h1>
+            </Link>
             <HeaderContents />
           </div>
         </Header>

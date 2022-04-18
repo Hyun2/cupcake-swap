@@ -29,6 +29,20 @@ const Contents = styled.div`
   text-align: center;
 `;
 
+const Approve = styled.div`
+  background-color: black;
+  color: white;
+
+  position: absolute;
+`;
+
+const Approved = styled.div`
+  background-color: grey;
+  color: black;
+
+  position: absolute;
+`;
+
 const NftCard = ({ contractAddr, tokenId, selected, src, name, collectionName }) => {
   // const myAssets = useStore((state) => state.myAssets);
   const toggleSelectAsset = useStore((state) => state.toggleSelectAsset);
@@ -47,6 +61,8 @@ const NftCard = ({ contractAddr, tokenId, selected, src, name, collectionName })
       selected={selected}
       pointer={swapStatus}
     >
+      {/* <Approve>Approve</Approve>
+      <Approved>Approved</Approved> */}
       {/* <CImage width="218" height="218" src={src} alt="" /> */}
       <CImage src={src} alt="" />
       <Contents>
